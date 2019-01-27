@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Demo02</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<style>
+    body {
+        margin-left: auto;
+        margin-right: auto;
+        width: 980px;
+    }
+</style>
+<body>
+    <h1>Demo02</h1>
+    <div id="app">
+        <p>{{message}}</p>
+        <hr>
+        得分: &nbsp;<p v-sblue="'blue'">{{numberForBlue}}</p>
+        <button @click="addBlue">ADD</button>
+        <hr>
+        战绩: &nbsp;<p v-sgreen="'green'">{{numberForGreen}}</p>
+        <button @click="addGreen">ADD</button>
+        <hr>
+        <div id="newLink"></div>
+        <hr>
+        <p>{{result.count}}</p>
+        <ul>
+            <li v-for="(item, index) in arr">{{item}}</li>
+        </ul>
+        <button onclick="add()">ADD</button>
+        <hr>
+        <p>{{counter}}</p>
+        <button @click="countAdd">ADD</button>
+    </div>
+
+    <script>
+        // 4.vue-set
+        function add() {
+            // 第一种方法
+            // Vue.set(outData, 'count', 999);
+            // 第二种方法
+            // app.result.count++;
+            // 动态改变数组
+            Vue.set(app.arr, 1, 'ionic');
+        }
+        const outData = {
+            count: 1,
+            msg: 'success'
+        };
+        // 3.扩展构造器
+        const newLink = Vue.extend({
+            template: `
+                <p>
+                    <a :href='newUrl' target='_blank'>{{tip}}</a>
+                </p>
+            `,
+            data() {
+                return {
+                    newUrl: 'https://github.com/lanxuexing?tab=repositories',
+                    tip: 'click me open new link'
+                }
+            }
+        });
+        new newLink().$mount('#newLink');
+        // 2.自定义指令
+        Vue.directive('sblue', function(el, binding, vnode) {
+            // console.log('el: ', el);
+            // console.log('binding: ', binding);
+            // console.log('vnode: ', vnode);
+            el.style.color = binding.value;
+        });
+        Vue.directive('sgreen', {
+            bind: function(el, binding) {
+                el.style.color = binding.value;
+                // console.log('bind阶段...', arguments);
+            },
+            inserted: function() {
+                // console.log('inserted阶段...', arguments);
+            },
+            update: function() {
+                // console.log('update阶段...', arguments);
+            },
+            componentUpdated: function() {
+                // console.log('componentUpdated阶段...', arguments);
+            },
+            unbind: function() {
+                // console.log('unbind阶段...', arguments);
+            }
+        });
+        // 1.接管Dom
+        const app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    message: 'A Better You, A Bigger World.',
+                    numberForBlue: 0,
+                    numberForGreen: 0,
+                    result: outData,
+                    arr: ['react', 'angular', 'vue'],
+                    counter: 1,
+                }
+            },
+            computed: {
+                
+            },
+            methods: {
+                addBlue() {
+                    this.numberForBlue++;
+                },
+                addGreen() {
+                    this.numberForGreen++;
+                },
+                countAdd() {
+                    this.counter++;
+                }
+            },
+            // 生命周期函数
+            beforeCreate() {
+                console.log('1.beforeCreate初始化之前');
+            },
+            created() {
+                console.log('2.created创建完成');
+            },
+            beforeMount() {
+                console.log('3.beforeMount挂载之前');
+            },
+            mounted() {
+                console.log('4.mounted挂载完成');
+            },
+            beforeUpdate() {
+                console.log('5.beforeUpdate数据更新之前');
+            },
+            updated() {
+                console.log('6.updated数据更新完成');
+            },
+            activated() {
+                console.log('7.activated路由激活');
+            },
+            deactivated() {
+                console.log('8.activated路由销毁');
+            },
+            beforeDestroy() {
+                console.log('9.beforeDestroy销毁之前');
+            },
+            destroyed() {
+                console.log('10.beforeDestroy销毁完成');
+            },
+        });
+    </script>
+</body>
+</html>

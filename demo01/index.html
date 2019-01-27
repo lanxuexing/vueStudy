@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Demo01</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<style>
+    body {
+        margin-left: auto;
+        margin-right: auto;
+        width: 980px;
+    }
+    .ok {
+        color: green;
+    }
+    .err {
+        color: red;
+    }
+    .big {
+        font-size: 20px;
+    }
+    .blue {
+        color: blue;
+    }
+</style>
+<body>
+    <h1>Demo01</h1>
+    <div id="app">
+        <p>{{message}}</p>
+        <p v-if="isLogin">您还未登录，请先登录！</p>
+        <p v-else="isLosgin">您好，世界！</p>
+        <hr>
+        <ul>
+            <li v-for="(item, index) in newArray">{{item}}</li>
+        </ul>
+        <hr>
+        <ul>
+            <li v-for="(item, index) in newObject">{{item.name}}--{{item.nick}}--{{item.age}}</li>
+        </ul>
+        <hr>
+        <ul>
+            <li v-for="(item, index) in frontEnd" v-on:click="toast(item)">{{item}}</li>
+        </ul>
+        <hr>
+        <ul>
+            <li>
+                实时：<input type="text" v-on:keyup.enter="keyup" v-model="number">&nbsp;&nbsp;<span>{{number}}</span>
+            </li>
+            <li>
+                懒加载：<input type="text" v-on:keyup.enter="keyup" v-model.lazy="number">&nbsp;&nbsp;<span>{{number}}</span>
+            </li>
+            <li>
+                限定符：<input type="text" @keyup.enter="keyup" v-model.number="number">&nbsp;&nbsp;<span>{{number}}</span>
+            </li>
+            <li>
+                去空格：<input type="text" @keyup.13="keyup" v-model.trim="number">&nbsp;&nbsp;<span>{{number}}</span>
+            </li>
+        </ul>
+        <hr>
+        <ul>
+            <li>
+                <p>第一种方式：</p>
+                <img v-bind:src="imageSrc" width="60" alt="">
+            </li>
+            <li>
+                <p>第二种方式：</p>
+                <img :src="imageSrc" width="60" alt="">
+            </li>
+        </ul>
+        <hr>
+        <ul>
+            <li v-for="(item, index) in fruits">
+                <input type="checkbox" :id="item.id" :value="item.name" v-model="checkFruits">
+                <label :for="item.id">{{item.pic}}</label>
+            </li>
+            <p>you are select fruits: {{checkFruits}}</p>
+        </ul>
+        <hr>
+        <p v-bind:class="['blue', 'big']">以下是答案: </p>
+        <p :class="{ok: isOk}">正确</p>
+        <p :class="{err: isOk}">错误</p>
+        <hr>
+        <ul>
+            <li>
+                <span>原样输出: </span>
+                <span v-pre>{{message}}</span>
+            </li>
+            <li>
+                <span>渲染完成之后输出: </span>
+                <span v-cloak>{{message}}</span>
+            </li>
+            <li>
+                <span>只渲染一次: </span>
+                <span v-once>{{number}}</span>
+            </li>
+        </ul>
+    </div>
+
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    message: 'A Better You, A Bigger World.',
+                    isLogin: false,
+                    array: [12, 7, 91, 77, 03],
+                    object: [{
+                            'name': '唐三',
+                            'nick': '蓝银草, 昊天锤',
+                            'age': 12
+                        },{
+                            'name': '小舞',
+                            'nick': '肉骨魅兔',
+                            'age': 10
+                        }, {
+                            'name': '宁荣荣',
+                            'nick': '七宝琉璃塔',
+                            'age': 13
+                        }
+                    ],
+                    frontEnd: ['React', 'Angualr', 'Vue'],
+                    number: '我是默认的',
+                    imageSrc: 'https://cn.vuejs.org/images/logo.png',
+                    fruits: [
+                        {
+                            'id': 'apple',
+                            'name': '苹果',
+                            'pic': '🍎'
+                        },
+                        {
+                            'id': 'orange',
+                            'name': '橘子',
+                            'pic': '🍊'
+                        },
+                        {
+                            'id': 'pear',
+                            'name': '雪梨',
+                            'pic': '🍐'
+                        }
+                    ],
+                    checkFruits: [],
+                    isOk: true
+                }
+            },
+            computed: {
+                newArray: function() {
+                    return this.array.sort((a, b) => {
+                        return a - b;
+                    });
+                },
+                newObject: function() {
+                    return this.sortByKey(this.object, 'age');
+                }
+            },
+            methods: {
+                sortByKey(array, key) {
+                    return array.sort((a, b) => {
+                        const x = a[key];
+                        const y = b[key];
+                        return ((x < y) ? -1 : ((x > y) ? 1 : 0))
+                    });
+                },
+                toast(tip) {
+                    alert(`you are study ${tip}`);
+                },
+                keyup() {
+                    alert(`you are input: ${this.number}`);
+                }
+            },
+        });
+    </script>
+</body>
+</html>
