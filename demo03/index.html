@@ -22,9 +22,23 @@
         <header></header>
         <hr>
         <p>实时价格: {{newPrice}}</p>
+        <hr>
+        <p>得分情况: {{count}}</p>
+        <!-- 第一种写法 -->
+        <button @click="add(count, $event)">ADD</button>
+        <!-- 第二种写法 -->
+        <p><custom-btn @click.native="add(count, $event)"></custom-btn></p>
     </div>
+    <!-- 第三种写法 -->
+    <button onclick="app.add(app.count)">Outlet ADD</button>
 
     <script>
+        // 自定义组件事件发射
+        const customButton = {
+            template: `
+                <button>Custom ADD</button>
+            `
+        };
         // 2.自定义扩展1
         const extent_1 = Vue.extend({
             template: `
@@ -48,11 +62,12 @@
             data() {
                 return {
                     message: 'A Better You, A Bigger World.',
-                    price: 100
+                    price: 100,
+                    count: 0
                 }
             },
             components: {
-
+                'customBtn': customButton
             },
             computed: {
                 newPrice: function() {
@@ -60,7 +75,14 @@
                 }
             },
             methods: {
-
+                add(value, event) {
+                    console.log(arguments);
+                    if (value < 15) {
+                        this.count++;
+                    } else {
+                        this.count = 0;
+                    }
+                }
             },
             // 生命周期函数
             beforeCreate() {
