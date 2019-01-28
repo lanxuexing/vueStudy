@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Demo03</title>
+    <script type="text/javascript" src="../assets/js/vue.js"></script>
+</head>
+<style>
+    body {
+        margin-left: auto;
+        margin-right: auto;
+        width: 980px;
+    }
+</style>
+<body>
+    <h1>Demo03</h1>
+    <div id="app">
+        <p>{{message}}</p>
+        <hr>
+        <header></header>
+    </div>
+
+    <script>
+        // 2.自定义扩展1
+        const extent_1 = Vue.extend({
+            template: `
+                <p>{{msg}} -- {{type}}</p>
+            `,
+            data() {
+                return {
+                    msg: 'This is my first coustom extend of Vue!'
+                }
+            },
+            props: ['type']
+        });
+        new extent_1({
+            propsData: {
+                type: 'fontEnd'
+            }
+        }).$mount('header');
+        // 1.接管Dom
+        const app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    message: 'A Better You, A Bigger World.',
+                }
+            },
+            components: {
+
+            },
+            computed: {
+                
+            },
+            methods: {
+
+            },
+            // 生命周期函数
+            beforeCreate() {
+                console.log('1.beforeCreate初始化之前');
+            },
+            created() {
+                console.log('2.created创建完成');
+            },
+            beforeMount() {
+                console.log('3.beforeMount挂载之前');
+            },
+            mounted() {
+                console.log('4.mounted挂载完成');
+            },
+            beforeUpdate() {
+                console.log('5.beforeUpdate数据更新之前');
+            },
+            updated() {
+                console.log('6.updated数据更新完成');
+            },
+            activated() {
+                console.log('7.activated路由激活');
+            },
+            deactivated() {
+                console.log('8.activated路由销毁');
+            },
+            beforeDestroy() {
+                console.log('9.beforeDestroy销毁之前');
+            },
+            destroyed() {
+                console.log('10.beforeDestroy销毁完成');
+            }
+        });
+    </script>
+</body>
+</html>
