@@ -35,9 +35,51 @@
         <hr>
         <p>{{counter}}</p>
         <button @click="countAdd">ADD</button>
+        <hr>
+        <!-- 第一种写法 -->
+        <!-- <template id="temp">
+            <p>I am template</p>
+        </template> -->
+        <!-- 第二种写法 -->
+        <!-- <script type="x-template" id="temp">
+            <p>I am script template</p>
+        </script> -->
+        <vlan></vlan>
+        <!-- 第一种写法 -->
+        <!-- <caini address="China"></caini> -->
+        <!-- 第二种写法 -->
+        <!-- <caini v-bind:address="city"></caini> -->
+        <caini :address="city"></caini>
+        <!-- 第三种写法 -->
+        <ying></ying>
+        <!-- 第四种写法 -->
+        <component :is="dynamic"></component>
     </div>
 
     <script>
+        // 6.自定义组件
+        const cityComponent = {
+            template: `
+                <p style="color: green">beijing</p>
+            `
+        }
+        const yingComponent = {
+            template: `
+                <div>
+                    <p>This is yingComponent!</p>
+                    <city></city>
+                </div>
+            `,
+            components: {
+                'city': cityComponent
+            }
+        };
+        // 5.组件01
+        Vue.component('vlan', {
+            template: `
+                <p>countom component</p>
+            `
+        });
         // 4.vue-set
         function add() {
             // 第一种方法
@@ -102,6 +144,8 @@
                     result: outData,
                     arr: ['react', 'angular', 'vue'],
                     counter: 1,
+                    city: 'China',
+                    dynamic: 'ying'
                 }
             },
             computed: {
@@ -149,6 +193,17 @@
             destroyed() {
                 console.log('10.beforeDestroy销毁完成');
             },
+            // template: '#temp'
+            // 组件
+            components: {
+                'caini': {
+                    template: `
+                        <p>I am caini, I come from {{address}}</p>
+                    `,
+                    props: ['address']
+                },
+                'ying': yingComponent
+            }
         });
     </script>
 </body>
