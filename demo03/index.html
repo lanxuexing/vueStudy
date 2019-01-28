@@ -28,7 +28,17 @@
         <button @click="add(count, $event)">ADD</button>
         <!-- 第二种写法 -->
         <p><custom-btn @click.native="add(count, $event)"></custom-btn></p>
+        <hr>
+        <div>
+            <p>今天的气温: {{temperature}} ℃</p>
+            <p>出行穿衣建议: {{clothes}}</p>
+            <p>
+                <button @click="addTemperature">ADD</button>
+                <button @click="reduceTemperature">Reduce</button>
+            </p>
+        </div>
     </div>
+    <hr>
     <!-- 第三种写法 -->
     <button onclick="app.add(app.count)">Outlet ADD</button>
 
@@ -63,7 +73,9 @@
                 return {
                     message: 'A Better You, A Bigger World.',
                     price: 100,
-                    count: 0
+                    count: 0,
+                    temperature: 19,
+                    clothes: '夹克长裙'
                 }
             },
             components: {
@@ -82,8 +94,26 @@
                     } else {
                         this.count = 0;
                     }
+                },
+                addTemperature() {
+                    this.temperature += 5;
+                },
+                reduceTemperature() {
+                    this.temperature -= 5;
                 }
             },
+            // 第一种写法
+            // watch: {
+            //     temperature: function(newValue, oldValue) {
+            //         if (newValue >= 26) {
+            //             this.clothes = '体恤短袖';
+            //         } else if (newValue < 26 && oldValue > 5) {
+            //             this.clothes = '夹克长裙';
+            //         } else if (oldValue < 5) {
+            //             this.clothes = '棉裤羽绒';
+            //         }
+            //     }
+            // },
             // 生命周期函数
             beforeCreate() {
                 console.log('1.beforeCreate初始化之前');
@@ -114,6 +144,16 @@
             },
             destroyed() {
                 console.log('10.beforeDestroy销毁完成');
+            }
+        });
+        // 第二种写法
+        app.$watch('temperature', function(newValue, oldValue) {
+            if (newValue >= 26) {
+                this.clothes = '体恤短袖';
+            } else if (newValue < 26 && oldValue > 5) {
+                this.clothes = '夹克长裙';
+            } else if (oldValue < 5) {
+                this.clothes = '棉裤羽绒';
             }
         });
     </script>
