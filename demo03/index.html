@@ -46,6 +46,12 @@
     <button onclick="app.add(app.count)">Outlet ADD</button>
 
     <script>
+        // 5.扩展
+        const extendObject = {
+            updated: function() {
+                console.log('我是扩展的Updated...');
+            }
+        };
         // 4.混入mixins
         const printNumber = {
             updated: function() {
@@ -117,6 +123,7 @@
                     this.temperature -= 5;
                 },
                 addNumber() {
+                    console.log('我是原生的方法, 执行成绩增加操作...');
                     this.number++;
                 }
             },
@@ -135,6 +142,7 @@
             mixins: [
                 printNumber
             ],
+            extends: extendObject,
             // 生命周期函数
             beforeCreate() {
                 console.log('1.beforeCreate初始化之前');
