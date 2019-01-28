@@ -20,6 +20,8 @@
         <p>{{message}}</p>
         <hr>
         <header></header>
+        <hr>
+        <p>实时价格: {{newPrice}}</p>
     </div>
 
     <script>
@@ -46,13 +48,16 @@
             data() {
                 return {
                     message: 'A Better You, A Bigger World.',
+                    price: 100
                 }
             },
             components: {
 
             },
             computed: {
-                
+                newPrice: function() {
+                    return this.price = '¥ ' + this.price;
+                }
             },
             methods: {
 
