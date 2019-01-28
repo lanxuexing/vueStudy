@@ -37,13 +37,27 @@
                 <button @click="reduceTemperature">Reduce</button>
             </p>
         </div>
+        <hr>
+        <p>当前成绩: {{number}}</p>
+        <button @click="addNumber">ADD</button>
     </div>
     <hr>
     <!-- 第三种写法 -->
     <button onclick="app.add(app.count)">Outlet ADD</button>
 
     <script>
-        // 自定义组件事件发射
+        // 4.混入mixins
+        const printNumber = {
+            updated: function() {
+                console.log('当前成绩数据发生变化了...', this.number); // 注意这里的updated是vue十大生命周期函数之一, 不能乱写, 混入的先于原生执行
+            }
+        };
+        Vue.mixin({
+            updated: function() {
+                console.log('我是全局的混入...');
+            }
+        });
+        // 3.自定义组件事件发射
         const customButton = {
             template: `
                 <button>Custom ADD</button>
@@ -75,7 +89,8 @@
                     price: 100,
                     count: 0,
                     temperature: 19,
-                    clothes: '夹克长裙'
+                    clothes: '夹克长裙',
+                    number: 0,
                 }
             },
             components: {
@@ -100,6 +115,9 @@
                 },
                 reduceTemperature() {
                     this.temperature -= 5;
+                },
+                addNumber() {
+                    this.number++;
                 }
             },
             // 第一种写法
@@ -114,6 +132,9 @@
             //         }
             //     }
             // },
+            mixins: [
+                printNumber
+            ],
             // 生命周期函数
             beforeCreate() {
                 console.log('1.beforeCreate初始化之前');
