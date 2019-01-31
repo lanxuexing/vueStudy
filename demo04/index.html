@@ -22,32 +22,91 @@
     <h1>Demo04</h1>
     <div id="app">
         <p id="msg">{{message}}</p>
+        <header></header>
+        <button onclick="destroy()">destory</button>
+        <button onclick="refresh()">refresh</button>
+        <button onclick="tick()">modify</button>
+        <hr>
+        <p>{{number}}</p>
+        <button @click="add">ADD</button>
     </div>
+    <hr>
+    <button onclick="reduce()">REDUCE</button>
+    <button onclick="reduceOnce()">REDUCE ONCE</button>
+    <button onclick="off()">OFF</button>
 
     <script>
+        // 2.自定义扩展
+        const customExpand = Vue.extend({
+            template: `
+                <p>{{message}}</p>
+            `,
+            data() {
+                return {
+                    message: 'Hello, I am Coustom Expand!'
+                }
+            },
+            mounted() {
+                console.log('mounted method init...');
+            },
+            updated() {
+                console.log('updated method init...');
+            },
+            destroyed() {
+                console.log('destroy method init...');
+            }
+        });
+        const coustomObj = new customExpand().$mount('header');
         // 1.接管Dom
         const app = new Vue({
             el: '#app',
             data() {
                 return {
                     message: 'A Better You, A Bigger World.',
+                    number: 1
                 }
-            },
-            components: {
-
             },
             mounted() {
                 $('#msg').html('I am Jquery!');
             },
-            computed: {
-
-            },
             methods: {
                 add() {
                     console.log('I am Vue inner methods');
+                    this.number++;
                 }
             },
         });
+        function destroy() {
+            coustomObj.$destroy();
+        }
+        function refresh() {
+            coustomObj.$forceUpdate();
+        }
+        function tick() {
+            coustomObj.message = 'Hello, I am Coustom Expand! modify';
+            console.log('====',  coustomObj.message);
+            coustomObj.$nextTick(function () {
+                console.log('数据更新啦...')
+            });
+        }
+        // 3.外部扩展方法
+        app.$on('reduce', function() {
+            this.number--;
+        });
+        app.$once('reduceOnce', function() {
+            this.number--;
+        });
+        // 4.外部调用外部方法
+        function reduce() {
+            app.$emit('reduce');
+        }
+        function reduceOnce() {
+            app.$emit('reduceOnce');
+        }
+        // 5.关闭外部事件
+        function off() {
+            app.$off('reduce');
+        }
     </script>
 </body>
 
