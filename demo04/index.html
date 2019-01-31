@@ -29,13 +29,37 @@
         <hr>
         <p>{{number}}</p>
         <button @click="add">ADD</button>
+        <hr>
+        <vlan>
+            <span slot="url">{{githubData.url}}</span>
+            <span slot="name">{{githubData.name}}</span>
+            <img slot="avatar" width="60" v-bind:src="githubData.avatar" alt="">
+        </vlan>
     </div>
     <hr>
     <button onclick="reduce()">REDUCE</button>
     <button onclick="reduceOnce()">REDUCE ONCE</button>
     <button onclick="off()">OFF</button>
+    <hr>
+    <template id="temp">
+        <div>
+            <p>
+                Github Url: <slot name="url"></slot>
+            </p>
+            <p>
+                userName: <slot name="name"></slot>
+            </p>
+            <p>
+                avatar: <slot name="avatar"></slot>
+            </p>
+        </div>
+    </template>
 
     <script>
+        // 6.自定义组件
+        const vlan = {
+            template: '#temp'
+        };
         // 2.自定义扩展
         const customExpand = Vue.extend({
             template: `
@@ -63,7 +87,12 @@
             data() {
                 return {
                     message: 'A Better You, A Bigger World.',
-                    number: 1
+                    number: 1,
+                    githubData: {
+                        url: 'https://github.com/lanxuexing',
+                        name: 'lanxuexing',
+                        avatar: 'https://avatars2.githubusercontent.com/u/20652750?s=460&v=4'
+                    }
                 }
             },
             mounted() {
@@ -75,6 +104,9 @@
                     this.number++;
                 }
             },
+            components: {
+                'vlan': vlan
+            }
         });
         function destroy() {
             coustomObj.$destroy();
@@ -84,16 +116,15 @@
         }
         function tick() {
             coustomObj.message = 'Hello, I am Coustom Expand! modify';
-            console.log('====',  coustomObj.message);
             coustomObj.$nextTick(function () {
-                console.log('数据更新啦...')
+                console.log('data updated...')
             });
         }
         // 3.外部扩展方法
-        app.$on('reduce', function() {
+        app.$on('reduce', function () {
             this.number--;
         });
-        app.$once('reduceOnce', function() {
+        app.$once('reduceOnce', function () {
             this.number--;
         });
         // 4.外部调用外部方法
